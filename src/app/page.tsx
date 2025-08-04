@@ -1,103 +1,156 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { guilds } from "@/data/guilds";
+import { GuildSelector } from "@/components/GuildSelector";
+import { SourceColorPreview } from "@/components/SourceColorPreview";
+import { TransformSlider } from "@/components/TransformSlider";
+import { ColorTransform } from "@/types/color-transform";
+import { sliderConfigs } from "@/data/slider-config";
+import { ColorPlane } from "@/components/ColorPlane";
+import { OpacitySlider } from "@/components/ui/OpacitySlider";
+import { colord } from "colord";
+import { HueSlider } from "@/components/ui/HueSlider";
+import { RelativeColorString } from "@/components/RelativeColorString";
+
+function getTransformedColor(
+  baseColor: string,
+  transform: ColorTransform,
+  alphaOverride?: number
+) {
+  // Alap szín-transzformáció: minden komponens ezt használja
+  let c = colord(baseColor)
+    .hue((colord(baseColor).toHsl().h + transform.hue) % 360)
+    .saturate(1 + transform.saturation / 100)  // +50 → 1.5, -50 → 0.5
+    .lighten(transform.lightness / 100);       // +50 → 0.5 (50%), 0 = semmi
+  const rgb = c.toRgb();
+  const a = typeof alphaOverride === "number" ? alphaOverride : transform.opacity;
+  return `rgba(${rgb.r},${rgb.g},${rgb.b},${a})`;
+}
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [selectedGuildId, setSelectedGuildId] = useState(guilds[0].id);
+  const selectedGuild = guilds.find((g) => g.id === selectedGuildId)!;
+  const [transform, setTransform] = useState<ColorTransform>({
+    lightness: 0,
+    saturation: 0,
+    hue: 0,
+    opacity: 1, // FONTOS: alapból 1 (teljesen látszik)
+  });
+  const [fixed, setFixed] = useState<Record<keyof ColorTransform, boolean>>({
+    lightness: false,
+    saturation: false,
+    hue: false,
+    opacity: false,
+  });
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  // Ez a previewColor lesz a legtöbb slider alapja, mindig alpha=1
+  const previewColor = getTransformedColor(selectedGuild.surfaceColor, { ...transform, opacity: 1 }, 1);
+
+  // Ez a tényleges preview, ami az opacity-t is mutatja (current color)
+  const previewColorWithOpacity = getTransformedColor(
+    selectedGuild.surfaceColor,
+    transform
+  );
+
+  // Ez a relatív CSS string, ha kell:
+  // (használd a saját logicodat, ha máshogy szeretnéd)
+  // const cssString = ...;
+
+  return (
+    <main className="max-w-xl mx-auto p-8">
+      <GuildSelector
+        guilds={guilds}
+        selectedGuildId={selectedGuildId}
+        onChange={setSelectedGuildId}
+      />
+
+      {/* Szín preview (opacity-vel együtt) */}
+      <SourceColorPreview color={previewColorWithOpacity} />
+
+      {/* Sliderek */}
+      <TransformSlider
+        label="Lightness"
+        min={-50}
+        max={50}
+        value={transform.lightness}
+        onChange={(val) => setTransform((t) => ({ ...t, lightness: val }))}
+        unit="%"
+        onReset={() => setTransform((t) => ({ ...t, lightness: 0 }))}
+        fixable
+        isFixed={fixed.lightness}
+        onFixToggle={(isFixed) => setFixed((f) => ({ ...f, lightness: isFixed }))}
+      />
+      <TransformSlider
+        label="Saturation"
+        min={-50}
+        max={50}
+        value={transform.saturation}
+        onChange={(val) => setTransform((t) => ({ ...t, saturation: val }))}
+        unit="%"
+        onReset={() => setTransform((t) => ({ ...t, saturation: 0 }))}
+        fixable
+        isFixed={fixed.saturation}
+        onFixToggle={(isFixed) => setFixed((f) => ({ ...f, saturation: isFixed }))}
+      />
+
+      {/* HUE: slider, previewColor (alpha=1) */}
+      <HueSlider
+        value={transform.hue}
+        onChange={(val) => setTransform((t) => ({ ...t, hue: val }))}
+      />
+
+      {/* OPACITY: slider, previewColor (alpha=1, csak háttérhez kell) */}
+      <OpacitySlider
+        value={transform.opacity}
+        onChange={(val) => setTransform((t) => ({ ...t, opacity: val }))}
+        previewColor={previewColor}
+      />
+
+      {/* ColorPlane: mindig previewColor (alpha=1) */}
+      <ColorPlane
+        sourceColor={selectedGuild.surfaceColor}
+        transform={{ ...transform, opacity: 1 }}
+        onPlaneChange={(lDelta, sDelta) => {
+          setTransform((t) => ({
+            ...t,
+            lightness: lDelta,
+            saturation: sDelta,
+            hue: 0,
+            opacity: 1,
+          }));
+          setFixed((f) => ({
+            ...f,
+            hue: true,
+            opacity: true,
+          }));
+        }}
+      />
+
+      {/* Ha akarod, itt lehet a relatív szintaxis preview */}
+      {/* <RelativeColorString cssString={cssString} /> */}
+
+      {/* RESET */}
+      <button
+        type="button"
+        onClick={() => {
+          setTransform({
+            lightness: 0,
+            saturation: 0,
+            hue: 0,
+            opacity: 1,
+          });
+          setFixed({
+            lightness: false,
+            saturation: false,
+            hue: false,
+            opacity: false,
+          });
+        }}
+        className="my-2 px-4 py-2 rounded bg-slate-200 hover:bg-slate-300 font-bold"
+      >
+        Reset all
+      </button>
+    </main>
   );
 }
