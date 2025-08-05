@@ -1,6 +1,5 @@
 import { ColorTransform } from "@/types/color-transform";
 
-// Segítség: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color-from
 export function getColorFromString(
   sourceColor: string,
   transform: ColorTransform

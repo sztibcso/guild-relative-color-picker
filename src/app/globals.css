@@ -121,3 +121,10 @@
   }
 }
 
+button {
+  cursor: pointer;
+}
+
+.nextjs-portal, #__next-route-announcer__ {
+  display: none !important;
+}

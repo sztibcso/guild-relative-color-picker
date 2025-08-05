@@ -1,4 +1,3 @@
-// slider-config.ts (ha akarod külön file-ba)
 import { ColorTransform } from "@/types/color-transform";
 
 export const sliderConfigs: {

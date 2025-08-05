@@ -1,33 +1,62 @@
 import * as Slider from "@radix-ui/react-slider";
 
-export function HueSlider({ value, onChange }: { value: number; onChange: (val: number) => void }) {
+type HueSliderProps = {
+  value: number; 
+  onChange: (val: number) => void;
+  sourceHue: number; 
+};
+
+export function HueSlider({ value, onChange, sourceHue }: HueSliderProps) {
+  const HUE_SLIDER_RANGE = 180; 
+  const sliderMin = -HUE_SLIDER_RANGE;
+  const sliderMax = HUE_SLIDER_RANGE;
+
+  function makeHueGradient(sourceHue: number) {
+    let stops = [];
+    for (let i = 0; i <= 6; i++) {
+      let h = (sourceHue + (i - 3) * 60 + 360) % 360;
+      stops.push(`hsl(${h}, 100%, 50%) ${(i * 100) / 6}%`);
+    }
+    return `linear-gradient(to right, ${stops.join(",")})`;
+  }
+
   return (
-    <Slider.Root
-      className="relative flex items-center select-none w-full h-7"
-      min={-180}
-      max={180}
-      step={1}
-      value={[value]}
-      onValueChange={([val]) => onChange(val)}
-    >
-      {/* Track */}
-      <Slider.Track
-        className="relative h-7 w-full rounded-full"
+    <div className="mb-1">
+      <span
+        className="text-lg font-bold"
         style={{
-          background:
-            "linear-gradient(to right, red, yellow, lime, cyan, blue, magenta, red)",
-        }}
+          fontFamily: "'VT323', monospace",
+        }}>Hue</span>
+      <Slider.Root
+        className="relative flex items-center select-none w-full h-7"
+        min={sliderMin}
+        max={sliderMax}
+        step={1}
+        value={[value]}
+        onValueChange={([val]) => onChange(val)}
       >
-        {/* Range (nem feltétlen kell ide, de lehet) */}
-        <Slider.Range className="absolute h-full rounded-full" />
-      </Slider.Track>
-      {/* Thumb */}
-      <Slider.Thumb
-        className="block h-8 w-8 rounded-full border-4 border-white shadow-lg bg-white cursor-pointer"
+        <Slider.Track
+          className="relative h-4 w-full rounded-full"
+          style={{
+            background: makeHueGradient(sourceHue),
+            borderRadius: 9999,
+            height: 10,
+          }}
+        >
+          <Slider.Range className="absolute h-full rounded-full" />
+        </Slider.Track>
+        <Slider.Thumb
+          className="block h-6 w-6 rounded-full border-2 border-blue-500 bg-white shadow-lg cursor-pointer"
+          style={{
+            boxShadow: "0 2px 8px #0003",
+          }}
+        />
+      </Slider.Root>
+      <span
+        className="text-md font-bold, text-slate-500"
         style={{
-          boxShadow: "0 2px 12px #0004",
-        }}
-      />
-    </Slider.Root>
+          fontFamily: "'VT323', monospace"
+        }}>{value > 0 ? `+${value}` : value}°</span>
+    </div>
   );
 }

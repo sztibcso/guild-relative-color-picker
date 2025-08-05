@@ -5,15 +5,13 @@ import { ColorPlaneProps } from "@/types/color-plane-props";
 export const ColorPlane: React.FC<ColorPlaneProps> = ({
   sourceColor,
   transform,
-  onPlaneChange, // ÚJ: erre nevezd át, hogy ne keveredjen!
-  size = 200,
+  onPlaneChange,
+  size = 300,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Forrás szín HSL-ben
   const hsl = colord(sourceColor).toHsl();
 
-  // Canvas kirajzolása
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -30,13 +28,11 @@ export const ColorPlane: React.FC<ColorPlaneProps> = ({
     }
   }, [sourceColor, size, hsl.h]);
 
-  // Pozíció a plane-en
   const currentS = Math.max(0, Math.min(100, hsl.s + transform.saturation));
   const currentL = Math.max(0, Math.min(100, hsl.l + transform.lightness));
   const xPos = (currentS / 100) * size;
   const yPos = (currentL / 100) * size;
 
-  // Plane-re kattintás
   function handlePlaneClick(e: React.MouseEvent<HTMLCanvasElement>) {
     const rect = canvasRef.current?.getBoundingClientRect();
     if (!rect) return;
@@ -46,15 +42,22 @@ export const ColorPlane: React.FC<ColorPlaneProps> = ({
     const newL = Math.round((y / size) * 100);
     const lDelta = newL - hsl.l;
     const sDelta = newS - hsl.s;
-    // ÚJ: átadjuk a plane változást (a page komponens dönti el, mit fixál)
     onPlaneChange(lDelta, sDelta);
   }
 
   return (
-    <div className="mb-4">
+    <div className="mb-1">
       <div className="flex items-center justify-between mb-1">
-        <span className="font-medium">Color Plane</span>
-        <span className="text-xs text-slate-500">
+        <span
+          className="text-lg font-bold"
+          style={{
+            fontFamily: "'VT323', monospace"
+          }}>Color Plane</span>
+        <span
+          className="text-xs font-bold, text-slate-500"
+          style={{
+            fontFamily: "'VT323', monospace"
+          }}>
           S: {currentS.toFixed(0)}% &nbsp; L: {currentL.toFixed(0)}%
         </span>
       </div>
@@ -73,7 +76,6 @@ export const ColorPlane: React.FC<ColorPlaneProps> = ({
           }}
           onClick={handlePlaneClick}
         />
-        {/* Jelölő: csak ha hue és opacity 0 */}
         {transform.hue === 0 && transform.opacity === 0 && (
           <div
             style={{
@@ -91,7 +93,11 @@ export const ColorPlane: React.FC<ColorPlaneProps> = ({
           />
         )}
       </div>
-      <p className="text-xs text-slate-400 mt-1">X: Saturation, Y: Lightness</p>
+      <p
+        className="text-xs font-bold, text-slate-500"
+        style={{
+          fontFamily: "'VT323', monospace"
+        }}>X: Saturation, Y: Lightness</p>
     </div>
   );
 };
