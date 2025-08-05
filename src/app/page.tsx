@@ -17,7 +17,7 @@ function getTransformedColor(
   transform: ColorTransform,
   alphaOverride?: number
 ) {
-  let c = colord(baseColor)
+  const c = colord(baseColor)
     .hue((colord(baseColor).toHsl().h + transform.hue) % 360)
     .saturate(1 + transform.saturation / 100)
     .lighten(transform.lightness / 100); 
@@ -156,7 +156,7 @@ export default function Home() {
             }}
             onClick={() => setModalOpen(true)}
           >
-            Don't click Me!
+            Don&apos;t click Me!
           </button>
         </div>
         <DontClickModal open={modalOpen} onClose={() => setModalOpen(false)} />

@@ -12,9 +12,9 @@ export function HueSlider({ value, onChange, sourceHue }: HueSliderProps) {
   const sliderMax = HUE_SLIDER_RANGE;
 
   function makeHueGradient(sourceHue: number) {
-    let stops = [];
+    const stops = [];
     for (let i = 0; i <= 6; i++) {
-      let h = (sourceHue + (i - 3) * 60 + 360) % 360;
+      const h = (sourceHue + (i - 3) * 60 + 360) % 360;
       stops.push(`hsl(${h}, 100%, 50%) ${(i * 100) / 6}%`);
     }
     return `linear-gradient(to right, ${stops.join(",")})`;

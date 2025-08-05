@@ -13,9 +13,9 @@ export function DontClickModal({ open, onClose }: { open: boolean; onClose: () =
                 style={{
                     fontFamily: "'VT323', monospace",
                 }}>
-                <h2 className="text-3xl mb-3">Uh-oh... You weren't supposed to click that.</h2>
+                <h2 className="text-3xl mb-3">Uh-oh... You weren&apos;t supposed to click that.</h2>
                 <h4 className="text-lg mb-6 text-gray-700">
-                    But hey, since you're here... why not go all in and hire me as your next Frontend Developer?</h4>
+                    But hey, since you&apos;re here... why not go all in and hire me as your next Frontend Developer?</h4>
                 <p>Thanks for stopping by.</p>
                 <div className="text-lg md:text-xl font-semibold">Tibor Szalontai</div>
                 <div className="text-sm">hired by</div>
