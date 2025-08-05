@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎨 Relative Color Picker
 
-## Getting Started
+A modern, pixelart-inspired color transformation tool – built with Next.js, Tailwind CSS, and Radix UI.
 
-First, run the development server:
+![Relative Color Picker Screenshot](./screenshot.png)
 
-```bash
+## Features
+
+- **Guild-based Source Color**: Select a guild to instantly use its surface color.
+- **Relative Color Transformations**: Adjust Lightness, Saturation, Hue, and Opacity _relatively_ (not absolutely!).
+- **Live 2D Color Plane**: Visual, interactive picker for fast color targeting.
+- **Custom Sliders**: Form controls for each transformation, always in sync with the color plane.
+- **CSS Syntax Display**: Instantly copy the CSS `color(from ...)` or `rgba(...)` string.
+- **Easter Egg**: Don’t click the button in the corner... (Or do. 😁)
+- **Pixelart/Retro UI**: VT323 font, gradients, responsive, with a hint of Tibcsó humor.
+
+## Tech Stack
+
+- [Next.js 14](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Radix UI Slider](https://www.radix-ui.com/primitives/docs/components/slider)
+- [colord](https://github.com/omgovich/colord) (for color math)
+
+## Setup & Development
+
+1. **Clone the repo:**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/relative-color-picker.git
+   cd relative-color-picker
+Install dependencies:
+
+bash
+Másolás
+Szerkesztés
+npm install
+# or
+yarn
+Start the dev server:
+
+bash
+Másolás
+Szerkesztés
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Open http://localhost:3000 in your browser.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Deployment
+Recommended: Vercel
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Zero-config, one-click deployment – see below for step-by-step guide.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Design notes
+All color adjustments are relative to the currently selected guild's surface color.
 
-## Learn More
+Changing the source color preserves your relative transformations (unless "Fix" is checked).
 
-To learn more about Next.js, take a look at the following resources:
+Sliders and the color plane are always synchronized.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Fully responsive, works on desktop & mobile.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Made with ❤️ and a pixel of humor by Tibcsó.
 
-## Deploy on Vercel
+yaml
+Másolás
+Szerkesztés
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### **Tippek:**
+- Ha screenshotot akarsz belerakni, mentsd el `screenshot.png` néven a repo gyökerébe, így a README tetején látható lesz!
+- A “YOUR_USERNAME” részt cseréld a saját GitHub user nevedre vagy orgodra.
+- Ha akarod, a README végére berakhatsz Vercel badge-et, live linket is!
+
+---
+
+**Letöltés:**  
+- Nyiss egy új file-t: `README.md`  
+- Másold be a fenti szöveget.  
+- Save & commit!
+
+**Ha akarsz még dizájnt vagy példát (pl. badge, animált gif stb.), szólj! 😉**
