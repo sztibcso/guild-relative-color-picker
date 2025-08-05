@@ -2,7 +2,6 @@
 
 A modern, pixelart-inspired color transformation tool – built with Next.js, Tailwind CSS, and Radix UI.
 
-![Relative Color Picker Screenshot](./screenshot.png)
 
 ## Features
 
@@ -27,22 +26,18 @@ A modern, pixelart-inspired color transformation tool – built with Next.js, Ta
    ```bash
    git clone https://github.com/YOUR_USERNAME/relative-color-picker.git
    cd relative-color-picker
-Install dependencies:
 
-bash
-Másolás
-Szerkesztés
-npm install
-# or
-yarn
-Start the dev server:
 
-bash
-Másolás
-Szerkesztés
-npm run dev
-# or
-yarn dev
+2. **Install dependencies:**
+   ```bash
+   npm install
+
+
+3. **Start the dev server::**
+   ```bash
+   npm run dev
+
+   
 Open http://localhost:3000 in your browser.
 
 Deployment
@@ -53,30 +48,10 @@ Zero-config, one-click deployment – see below for step-by-step guide.
 Design notes
 All color adjustments are relative to the currently selected guild's surface color.
 
-Changing the source color preserves your relative transformations (unless "Fix" is checked).
+Changing the source color preserves your relative transformations.
 
 Sliders and the color plane are always synchronized.
 
 Fully responsive, works on desktop & mobile. 
 
 Made with ❤️ and a pixel of humor by Tibcsó.
-
-yaml
-Másolás
-Szerkesztés
-
----
-
-### **Tippek:**
-- Ha screenshotot akarsz belerakni, mentsd el `screenshot.png` néven a repo gyökerébe, így a README tetején látható lesz!
-- A “YOUR_USERNAME” részt cseréld a saját GitHub user nevedre vagy orgodra.
-- Ha akarod, a README végére berakhatsz Vercel badge-et, live linket is!
-
----
-
-**Letöltés:**  
-- Nyiss egy új file-t: `README.md`  
-- Másold be a fenti szöveget.  
-- Save & commit!
-
-**Ha akarsz még dizájnt vagy példát (pl. badge, animált gif stb.), szólj! 😉**
