@@ -57,7 +57,7 @@ Changing the source color preserves your relative transformations (unless "Fix" 
 
 Sliders and the color plane are always synchronized.
 
-Fully responsive, works on desktop & mobile.
+Fully responsive, works on desktop & mobile. 
 
 Made with ❤️ and a pixel of humor by Tibcsó.
 
